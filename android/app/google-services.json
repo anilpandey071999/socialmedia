@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "576465634941",
+    "project_id": "members-2ed79",
+    "storage_bucket": "members-2ed79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576465634941:android:1e6dc29ce99bdaf5161314",
+        "android_client_info": {
+          "package_name": "com.anilpandey.memories"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576465634941-gtfsi80rjbcgmbit6l1k7ishetllak4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anilpandey.memories",
+            "certificate_hash": "bc0212cbfa18cbf0e878a4fb5710fb8656a7c958"
+          }
+        },
+        {
+          "client_id": "576465634941-i952b76cob4vghjn0p8evrmsmqk6dbhs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOmCyAIsHQfd0MjzXMMZVl6XRlPhLcqq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576465634941-i952b76cob4vghjn0p8evrmsmqk6dbhs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
