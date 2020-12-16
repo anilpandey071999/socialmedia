@@ -73,12 +73,16 @@ class _HomeState extends State<Home> {
   }
 
   onTap(int pageIndex) {
-    pageController.jumpToPage(
+    pageController.animateToPage(
       pageIndex,
+      duration: Duration(
+        milliseconds: 200,
+      ),
+      curve: Curves.bounceInOut,
     );
   }
 
-  Widget buildAuthScreen() {
+  Widget buildAuthScreen(context) {
     return Scaffold(
       body: PageView(
         children: [
@@ -181,6 +185,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return isAuth ? buildAuthScreen() : buildUnauthScreen();
+    return isAuth ? buildAuthScreen(context) : buildUnauthScreen();
   }
 }
