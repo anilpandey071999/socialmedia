@@ -13,19 +13,33 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline> {
   @override
   void initState() {
-    getUser();
+    // getUser();
+    getUserById();
     super.initState();
   }
 
-  getUser() {
-    userRef.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        print(doc.data());
-        print(doc.id);
-        print(doc.exists);
-      });
-    });
+  getUserById() async {
+    final id = "jxTm5q3K0PPKLVIkio3t";
+    final DocumentSnapshot doc = await userRef.doc(id).get();
+    print(doc.id);
+    print(doc.exists);
+    print(doc.data());
+    // userRef.doc(id).get().then((DocumentSnapshot doc) {
+    // print(doc.id);
+    // print(doc.exists);
+    // print(doc.data());
+    // });
   }
+
+  // getUser() {
+  //   userRef.get().then((QuerySnapshot snapshot) {
+  //     snapshot.docs.forEach((DocumentSnapshot doc) {
+  //       print(doc.data());
+  //       print(doc.id);
+  //       print(doc.exists);
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(context) {
