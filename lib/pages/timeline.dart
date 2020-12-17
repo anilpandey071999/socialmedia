@@ -21,6 +21,8 @@ class _TimelineState extends State<Timeline> {
     userRef.get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         print(doc.data());
+        print(doc.id);
+        print(doc.exists);
       });
     });
   }
