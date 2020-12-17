@@ -32,8 +32,10 @@ class _TimelineState extends State<Timeline> {
         context,
         isAppTitle: true,
       ),
-      body: Text(
-        "TimeLine",
+      body: Center(
+        child: Text(
+          "TimeLine",
+        ),
       ),
     );
   }
