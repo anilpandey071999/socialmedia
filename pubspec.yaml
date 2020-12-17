@@ -41,7 +41,7 @@ dev_dependencies:
   uuid: ^2.2.2
   image: ^2.1.19
   animator: 0.1.4
-  firebase_core: ^0.5.0
+  firebase_core: ^0.5.3
   path_provider: ^1.6.24
   firebase_messaging: ^7.0.3
   timeago: 2.0.17

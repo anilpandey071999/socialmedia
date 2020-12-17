@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
       duration: Duration(
         milliseconds: 200,
       ),
-      curve: Curves.bounceInOut,
+      curve: Curves.easeIn,
     );
   }
 
@@ -98,7 +98,15 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
-        onTap: onTap,
+        onTap: (int pageIndex) {
+          pageController.animateToPage(
+            pageIndex,
+            duration: Duration(
+              milliseconds: 200,
+            ),
+            curve: Curves.easeIn,
+          );
+        },
         activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
@@ -123,7 +131,9 @@ class _HomeState extends State<Home> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(
+              Icons.account_circle,
+            ),
           ),
         ],
       ),
