@@ -11,9 +11,11 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  List<dynamic> users = [];
+
   @override
   void initState() {
-    getUser();
+    // getUser();
     // getUserById();
     // print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     super.initState();
@@ -32,25 +34,53 @@ class _TimelineState extends State<Timeline> {
   // });
   // }
 
-  getUser() async {
-    // !-----------limit-------!
-    final QuerySnapshot snapshot = await userRef.limit(1).get();
-    // !----------orderBy --------!
-    // final QuerySnapshot snapshot =
-    // await userRef.orderBy("postCount", descending: true).get();
-    //!----------where coluse in firebase------------!
-    // final QuerySnapshot snapshot = await userRef
-    //     .where("postCount", isLessThan: 10)
-    //     .where("userName", isEqualTo: "Jon") //parameters are case sensitive
-    //     .get();
-    snapshot.docs.forEach((DocumentSnapshot doc) {
-      print(doc.data());
-      print(doc.id);
-      // print(doc.exists);
-      // print("object@@@@@@@@@@@@@");
-    });
-  }
+  // getUser() async {
+  //   final QuerySnapshot snapshot = await userRef.get();
+  //   setState(() {
+  //     users = snapshot.docs;
+  //   });
+  // !-----------limit-------!
+  // final QuerySnapshot snapshot = await userRef.limit(1).get();
+  // !----------orderBy --------!
+  // final QuerySnapshot snapshot =
+  // await userRef.orderBy("postCount", descending: true).get();
+  //!----------where coluse in firebase------------!
+  // final QuerySnapshot snapshot = await userRef
+  //     .where("postCount", isLessThan: 10)
+  //     .where("userName", isEqualTo: "Jon") //parameters are case sensitive
+  //     .get();
+  // snapshot.docs.forEach((DocumentSnapshot doc) {
+  //   print(doc.data());
+  //   print(doc.id);
+  // print(doc.exists);
+  // print("object@@@@@@@@@@@@@");
+  // });
+  // }
 
+  // @override
+  // Widget build(context) {
+  //   return Scaffold(
+  //     appBar: header(
+  //       context,
+  //       isAppTitle: true,
+  //     ),
+  //     body: FutureBuilder<QuerySnapshot>(
+  //       future: userRef.get(),
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return circularProgress();
+  //         }
+  //         final List<Text> children =
+  //             snapshot.data.docs.map((e) => Text(e['userName'])).toList();
+  //         return Container(
+  //           child: ListView(
+  //             children: children,
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
   @override
   Widget build(context) {
     return Scaffold(
@@ -58,10 +88,20 @@ class _TimelineState extends State<Timeline> {
         context,
         isAppTitle: true,
       ),
-      body: Center(
-        child: Text(
-          "TimeLine",
-        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: userRef.snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
+          }
+          final List<Text> children =
+              snapshot.data.docs.map((e) => Text(e['userName'])).toList();
+          return Container(
+            child: ListView(
+              children: children,
+            ),
+          );
+        },
       ),
     );
   }
