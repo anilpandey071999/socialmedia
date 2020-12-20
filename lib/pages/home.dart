@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/create_account.dart';
 import 'package:socalnetwork/pages/profile.dart';
@@ -13,6 +14,7 @@ import 'package:socalnetwork/pages/upload.dart';
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final userRef = FirebaseFirestore.instance.collection('users');
 final DateTime timeStamp = DateTime.now();
+User currentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -74,7 +76,7 @@ class _HomeState extends State<Home> {
   createUserInFirestore() async {
     //1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
-    final DocumentSnapshot doc = await userRef.doc(user.id).get();
+    DocumentSnapshot doc = await userRef.doc(user.id).get();
 
     if (!doc.exists) {
       // 2) if user doesn't exites, then we want to take them to the create account page
@@ -90,7 +92,13 @@ class _HomeState extends State<Home> {
         "bio": "",
         "timeStamp": timeStamp
       });
+
+      doc = await userRef.doc().get();
     }
+
+    currentUser = User.fromDocument(doc);
+    print(currentUser);
+    print(currentUser.username);
   }
 
   onPageChanged(int pageIndex) {
