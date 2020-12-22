@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/widgets/header.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -7,19 +8,58 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: header(
-        context,
-        isAppTitle: true,
-      ),
-      body: Center(
-        child: Text(
-          "Search",
+  AppBar buildSearchField() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: TextFormField(
+        decoration: InputDecoration(
+          hintText: "Search for a user...",
+          filled: true,
+          prefixIcon: Icon(
+            Icons.account_box,
+            size: 28.0,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () => print("Cleared"),
+          ),
         ),
       ),
     );
+  }
+
+  buildNoContent() {
+    return Container(
+      child: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            SvgPicture.asset(
+              'assets/images/search.svg',
+              height: 300.0,
+            ),
+            Text(
+              "Find Users",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontSize: 60.0,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+        appBar: buildSearchField(),
+        body: buildNoContent());
   }
 }
 
