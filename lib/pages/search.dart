@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:socalnetwork/models/user.dart';
+import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socalnetwork/widgets/progress.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -8,10 +12,27 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  TextEditingController searchController = TextEditingController();
+  Future<QuerySnapshot> searchResultsFuture;
+
+  handleSearch(String query) {
+    Future<QuerySnapshot> user =
+        userRef.where("displayName", isGreaterThanOrEqualTo: query).get();
+
+    setState(() {
+      searchResultsFuture = user;
+    });
+  }
+
+  clearSearch() {
+    searchController.clear();
+  }
+
   AppBar buildSearchField() {
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
+        controller: searchController,
         decoration: InputDecoration(
           hintText: "Search for a user...",
           filled: true,
@@ -21,9 +42,10 @@ class _SearchState extends State<Search> {
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.clear),
-            onPressed: () => print("Cleared"),
+            onPressed: clearSearch,
           ),
         ),
+        onFieldSubmitted: handleSearch,
       ),
     );
   }
@@ -55,12 +77,33 @@ class _SearchState extends State<Search> {
     );
   }
 
+  buildSearchResult() {
+    return FutureBuilder(
+      future: searchResultsFuture,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return circularProgress();
+        }
+        List<Text> searchResult = [];
+        snapshot.data.docs.forEach((doc) {
+          User user = User.fromDocument(doc);
+          searchResult.add(Text(user.username));
+        });
+        return ListView(
+          children: searchResult,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
-        appBar: buildSearchField(),
-        body: buildNoContent());
+      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+      appBar: buildSearchField(),
+      body:
+          searchResultsFuture == null ? buildNoContent() : buildSearchResult(),
+    );
   }
 }
 
