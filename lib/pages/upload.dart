@@ -96,7 +96,6 @@ class _UploadState extends State<Upload> {
 
 buildUploadForm() {
   return Container(
-    color: Colors.black,
     child: Center(
       child: Text("File Loaded"),
     ),
