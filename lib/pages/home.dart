@@ -8,7 +8,7 @@ import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/create_account.dart';
 import 'package:socalnetwork/pages/profile.dart';
 import 'package:socalnetwork/pages/search.dart';
-import 'package:socalnetwork/pages/timeline.dart';
+// import 'package:socalnetwork/pages/timeline.dart';
 import 'package:socalnetwork/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
