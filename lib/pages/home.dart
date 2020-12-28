@@ -1,17 +1,19 @@
-import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/create_account.dart';
 import 'package:socalnetwork/pages/profile.dart';
 import 'package:socalnetwork/pages/search.dart';
-// import 'package:socalnetwork/pages/timeline.dart';
+import 'package:socalnetwork/pages/timeline.dart';
 import 'package:socalnetwork/pages/upload.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+FirebaseStorage storage = FirebaseStorage.instance;
+final storageRef = storage.ref();
 final userRef = FirebaseFirestore.instance.collection('users');
 final DateTime timeStamp = DateTime.now();
 User currentUser;

@@ -1,11 +1,15 @@
 import 'dart:io';
-import 'dart:ui';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socalnetwork/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socalnetwork/pages/home.dart';
+import 'package:socalnetwork/widgets/progress.dart';
+import 'package:image/image.dart' as Im;
+import 'package:uuid/uuid.dart';
 
 class Upload extends StatefulWidget {
   final User currentUser;
@@ -18,6 +22,8 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload> {
   File file;
+  bool isUploading = false;
+  String postId = Uuid().v4();
 
   handelTakePhoto() async {
     Navigator.pop(context);
@@ -106,6 +112,30 @@ class _UploadState extends State<Upload> {
     });
   }
 
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$postId.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 80));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  uploadImage(imageFile) async {
+    UploadTask uploadTask =
+        storageRef.child("path_$postId.jpg").putFile(imageFile);
+  }
+
+  handleSubmit() async {
+    setState(() {
+      isUploading = true;
+    });
+    await compressImage();
+    await uploadImage(file);
+  }
+
   Scaffold buildUploadForm() {
     return Scaffold(
       appBar: AppBar(
@@ -122,7 +152,7 @@ class _UploadState extends State<Upload> {
         ),
         actions: [
           FlatButton(
-            onPressed: () => print("Pressed..."),
+            onPressed: isUploading ? null : () => handleSubmit(),
             child: Text(
               "Post",
               style: TextStyle(
@@ -136,6 +166,7 @@ class _UploadState extends State<Upload> {
       ),
       body: ListView(
         children: [
+          isUploading ? linearProgress() : Text(""),
           Container(
             height: 220.0,
             width: MediaQuery.of(context).size.width * 0.8,
