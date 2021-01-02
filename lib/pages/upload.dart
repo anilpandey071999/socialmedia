@@ -1,5 +1,6 @@
+// import 'dart:html';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +22,8 @@ class Upload extends StatefulWidget {
 }
 
 class _UploadState extends State<Upload> {
+  TextEditingController locationController = TextEditingController();
+  TextEditingController captionController = TextEditingController();
   File file;
   bool isUploading = false;
   String postId = Uuid().v4();
@@ -123,9 +126,30 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  uploadImage(imageFile) async {
-    UploadTask uploadTask =
+  Future<String> uploadImage(imageFile) async {
+    firebase_storage.UploadTask uploadTask =
         storageRef.child("path_$postId.jpg").putFile(imageFile);
+    firebase_storage.TaskSnapshot storageSnap =
+        await uploadTask.whenComplete(() => null);
+    String downloadUrl = await storageSnap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  createPostInFirebase({String mediaURL, String location, String discription}) {
+    postsRef
+        .doc(widget.currentUser.id)
+        .collection("userPosts")
+        .doc(postId)
+        .set({
+      "postId": postId,
+      "ownerId": widget.currentUser.id,
+      "username": widget.currentUser.username,
+      "mediaURL": mediaURL,
+      "discription": discription,
+      "location": location,
+      "timeStamp": timeStamp,
+      "likes": {},
+    });
   }
 
   handleSubmit() async {
@@ -133,7 +157,19 @@ class _UploadState extends State<Upload> {
       isUploading = true;
     });
     await compressImage();
-    await uploadImage(file);
+    String mediaURL = await uploadImage(file);
+    createPostInFirebase(
+      mediaURL: mediaURL,
+      location: locationController.text,
+      discription: captionController.text,
+    );
+    captionController.clear();
+    locationController.clear();
+    setState(() {
+      file = null;
+      isUploading = false;
+      postId = Uuid().v4();
+    });
   }
 
   Scaffold buildUploadForm() {
@@ -195,6 +231,7 @@ class _UploadState extends State<Upload> {
             title: Container(
               width: 250.0,
               child: TextField(
+                controller: captionController,
                 decoration: InputDecoration(
                   hintText: "Write a caption...",
                   border: InputBorder.none,
@@ -212,6 +249,7 @@ class _UploadState extends State<Upload> {
             title: Container(
               width: 250.0,
               child: TextField(
+                controller: locationController,
                 decoration: InputDecoration(
                   hintText: "Where was this photo was taken?",
                   border: InputBorder.none,
