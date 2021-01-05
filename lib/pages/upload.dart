@@ -1,4 +1,5 @@
 // import 'dart:html';
+
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +12,7 @@ import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Upload extends StatefulWidget {
   final User currentUser;
@@ -152,6 +154,11 @@ class _UploadState extends State<Upload> {
     });
   }
 
+  getUserLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
   handleSubmit() async {
     setState(() {
       isUploading = true;
@@ -270,7 +277,7 @@ class _UploadState extends State<Upload> {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               color: Colors.blue,
-              onPressed: () => print('get user location'),
+              onPressed: getUserLocation,
               icon: Icon(
                 Icons.my_location,
                 color: Colors.white,
