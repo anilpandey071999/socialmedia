@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 
 class EditProfile extends StatefulWidget {
+  final String currentUserId;
+  EditProfile({this.currentUserId});
   @override
   _EditProfileState createState() => _EditProfileState();
 }

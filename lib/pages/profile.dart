@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
+import 'package:socalnetwork/pages/edit_profile.dart';
 import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/header.dart';
 import 'package:socalnetwork/widgets/progress.dart';
@@ -13,6 +14,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final String currentUserId = currentUser?.id;
+
   buildCountColumn(String label, int count) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -40,8 +43,46 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  editProfile() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditProfile(currentUserId: currentUserId)));
+  }
+
+  Container buildButton({String text, Function function}) {
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      child: FlatButton(
+        onPressed: function,
+        child: Container(
+          width: 250.0,
+          height: 27.0,
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            border: Border.all(
+              color: Colors.blue,
+            ),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+      ),
+    );
+  }
+
   buildProfileButton() {
-    return Text("profile button");
+    bool isPropfileOwner = widget.profileId == currentUserId;
+    if (isPropfileOwner) {
+      return buildButton(
+        text: "Edit Profile",
+        function: editProfile,
+      );
+    }
   }
 
   buildProfileHeader() {
@@ -122,6 +163,22 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  buildTogglePOstOrientation() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          icon: Icon(Icons.grid_on),
+          color: Theme.of(context).primaryColor,
+        ),
+        IconButton(
+          icon: Icon(Icons.list),
+          color: Colors.grey,
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +189,11 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
+          Divider(),
+          buildTogglePOstOrientation(),
+          Divider(
+            height: 0.0,
+          ),
         ],
       ),
     );
