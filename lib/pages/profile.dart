@@ -55,20 +55,23 @@ class _ProfileState extends State<Profile> {
       padding: EdgeInsets.only(top: 20.0),
       child: FlatButton(
         onPressed: function,
-        child: Container(
-          width: 250.0,
-          height: 27.0,
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            border: Border.all(
-              color: Colors.blue,
+        child: Expanded(
+          child: Container(
+            width: 250.0,
+            height: 27.0,
+            child: Text(
+              text,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
-            borderRadius: BorderRadius.circular(5.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              border: Border.all(
+                color: Colors.blue,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
           ),
         ),
       ),
