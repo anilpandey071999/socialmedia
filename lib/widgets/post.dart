@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/pages/home.dart';
+import 'package:socalnetwork/widgets/custom_image.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 
 class Post extends StatefulWidget {
@@ -123,7 +124,7 @@ class _PostState extends State<Post> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Image.network(mediaUrl),
+          cachedNetworkImage(mediaUrl),
         ],
       ),
     );
