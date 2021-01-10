@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/pages/edit_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/header.dart';
+import 'package:socalnetwork/widgets/post.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 
 class Profile extends StatefulWidget {
@@ -15,6 +18,35 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final String currentUserId = currentUser?.id;
+  int postCount = 0;
+  bool isLoading = false;
+  List<Post> posts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getProfilePost();
+  }
+
+  getProfilePost() async {
+    setState(() {
+      isLoading = true;
+    });
+    QuerySnapshot snapshot = await postsRef
+        .doc(widget.profileId)
+        .collection("userPosts")
+        .orderBy('timeStamp', descending: true)
+        .get();
+
+    setState(() {
+      isLoading = false;
+      postCount = snapshot.docs.length;
+      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+      print(
+          "-----------------------------------------------------------------");
+      print(posts);
+    });
+  }
 
   buildCountColumn(String label, int count) {
     return Column(
@@ -57,7 +89,7 @@ class _ProfileState extends State<Profile> {
         onPressed: function,
         child: Expanded(
           child: Container(
-            width: 250.0,
+            width: 216.0,
             height: 27.0,
             child: Text(
               text,
@@ -115,7 +147,7 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            buildCountColumn("posts", 0),
+                            buildCountColumn("posts", postCount),
                             buildCountColumn("followers", 0),
                             buildCountColumn("following", 0),
                           ],
@@ -182,6 +214,15 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  buildProfilePost() {
+    if (isLoading) {
+      return linearProgress();
+    }
+    return Column(
+      children: posts,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,6 +238,7 @@ class _ProfileState extends State<Profile> {
           Divider(
             height: 0.0,
           ),
+          buildProfilePost(),
         ],
       ),
     );
