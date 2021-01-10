@@ -30,10 +30,10 @@ class Post extends StatefulWidget {
     return Post(
       postId: doc['postId'],
       ownerId: doc['ownerId'],
-      userName: doc['userName'],
+      userName: doc['username'],
       location: doc['location'],
-      description: doc['description'],
-      mediaUrl: doc['mediaUrl'],
+      description: doc['discription'],
+      mediaUrl: doc['mediaURL'],
       likes: doc['likes'],
     );
   }
