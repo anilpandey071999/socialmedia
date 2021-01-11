@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
@@ -44,9 +45,6 @@ class _ProfileState extends State<Profile> {
       isLoading = false;
       postCount = snapshot.docs.length;
       posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
-      print(
-          "-----------------------------------------------------------------");
-      print(posts);
     });
   }
 
@@ -231,6 +229,29 @@ class _ProfileState extends State<Profile> {
   buildProfilePost() {
     if (isLoading) {
       return linearProgress();
+    } else if (posts.isEmpty) {
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/images/no_content.svg',
+              height: 260.0,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text(
+                "No Post",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     } else if (postOrientation == "grid") {
       List<GridTile> gridTiles = [];
       posts.forEach((post) {
