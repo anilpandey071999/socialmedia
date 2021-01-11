@@ -65,6 +65,7 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
+  final String currentUserId = currentUser?.id;
   final String postId;
   final String ownerId;
   final String userName;
@@ -73,6 +74,7 @@ class _PostState extends State<Post> {
   final String mediaUrl;
   int likeCount;
   Map likes;
+  bool isLiked;
 
   _PostState({
     this.postId,
@@ -118,9 +120,37 @@ class _PostState extends State<Post> {
     );
   }
 
+  handleLikePost() {
+    bool isLiked = likes[currentUserId] == true;
+
+    if (isLiked) {
+      postsRef
+          .doc(ownerId)
+          .collection("userPosts")
+          .doc(postId)
+          .update({'likes.$currentUserId': false});
+      setState(() {
+        likeCount -= 1;
+        isLiked = false;
+        likes[currentUserId] = false;
+      });
+    } else if (!isLiked) {
+      postsRef
+          .doc(ownerId)
+          .collection("userPosts")
+          .doc(postId)
+          .update({'likes.$currentUserId': true});
+      setState(() {
+        likeCount += 1;
+        isLiked = true;
+        likes[currentUserId] = true;
+      });
+    }
+  }
+
   buildPostImage() {
     return GestureDetector(
-      onDoubleTap: () => print("liking the post"),
+      onDoubleTap: handleLikePost,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -140,9 +170,9 @@ class _PostState extends State<Post> {
               padding: EdgeInsets.only(top: 40.0, left: 20.0),
             ),
             GestureDetector(
-              onTap: () => print("like post"),
+              onTap: handleLikePost,
               child: Icon(
-                Icons.favorite_border,
+                isLiked ? Icons.favorite : Icons.favorite_border,
                 size: 28.0,
                 color: Colors.pink,
               ),
@@ -198,6 +228,7 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
+    isLiked = (likes[currentUserId] == true);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
