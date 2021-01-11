@@ -20,6 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final String currentUserId = currentUser?.id;
   int postCount = 0;
+  String postOrientation = "grid";
   bool isLoading = false;
   List<Post> posts = [];
 
@@ -199,17 +200,29 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  setPostOrientation(String postOrientation) {
+    setState(() {
+      this.postOrientation = postOrientation;
+    });
+  }
+
   buildTogglePOstOrientation() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
+          onPressed: () => setPostOrientation("grid"),
           icon: Icon(Icons.grid_on),
-          color: Theme.of(context).primaryColor,
+          color: postOrientation == "grid"
+              ? Theme.of(context).primaryColor
+              : Colors.grey,
         ),
         IconButton(
+          onPressed: () => setPostOrientation("list"),
           icon: Icon(Icons.list),
-          color: Colors.grey,
+          color: postOrientation == "list"
+              ? Theme.of(context).primaryColor
+              : Colors.grey,
         )
       ],
     );
@@ -218,28 +231,29 @@ class _ProfileState extends State<Profile> {
   buildProfilePost() {
     if (isLoading) {
       return linearProgress();
-    }
-    List<GridTile> gridTiles = [];
-    posts.forEach((post) {
-      gridTiles.add(
-        GridTile(
-          child: PostTile(post),
-        ),
+    } else if (postOrientation == "grid") {
+      List<GridTile> gridTiles = [];
+      posts.forEach((post) {
+        gridTiles.add(
+          GridTile(
+            child: PostTile(post),
+          ),
+        );
+      });
+      return GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.5,
+        crossAxisSpacing: 1.5,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: gridTiles,
       );
-    });
-    return GridView.count(
-      crossAxisCount: 3,
-      childAspectRatio: 1.0,
-      mainAxisSpacing: 1.5,
-      crossAxisSpacing: 1.5,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: gridTiles,
-    );
-
-    // return Column(
-    //   children: posts,
-    // );
+    } else if (postOrientation == "list") {
+      return Column(
+        children: posts,
+      );
+    }
   }
 
   @override
