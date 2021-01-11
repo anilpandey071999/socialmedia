@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/header.dart';
 import 'package:socalnetwork/widgets/post.dart';
+import 'package:socalnetwork/widgets/post_tile.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 
 class Profile extends StatefulWidget {
@@ -218,9 +219,27 @@ class _ProfileState extends State<Profile> {
     if (isLoading) {
       return linearProgress();
     }
-    return Column(
-      children: posts,
+    List<GridTile> gridTiles = [];
+    posts.forEach((post) {
+      gridTiles.add(
+        GridTile(
+          child: PostTile(post),
+        ),
+      );
+    });
+    return GridView.count(
+      crossAxisCount: 3,
+      childAspectRatio: 1.0,
+      mainAxisSpacing: 1.5,
+      crossAxisSpacing: 1.5,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: gridTiles,
     );
+
+    // return Column(
+    //   children: posts,
+    // );
   }
 
   @override
