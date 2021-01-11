@@ -1,5 +1,5 @@
-import 'dart:ui';
-
+import 'dart:async';
+import 'package:animator/animator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +74,7 @@ class _PostState extends State<Post> {
   final String mediaUrl;
   int likeCount;
   Map likes;
+  bool showHeart = false;
   bool isLiked;
 
   _PostState({
@@ -144,6 +145,12 @@ class _PostState extends State<Post> {
         likeCount += 1;
         isLiked = true;
         likes[currentUserId] = true;
+        showHeart = true;
+      });
+      Timer(Duration(milliseconds: 500), () {
+        setState(() {
+          showHeart = false;
+        });
       });
     }
   }
@@ -153,8 +160,24 @@ class _PostState extends State<Post> {
       onDoubleTap: handleLikePost,
       child: Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           cachedNetworkImage(mediaUrl),
+          showHeart
+              ? Animator(
+                  duration: Duration(milliseconds: 500),
+                  tween: Tween(begin: 0.8, end: 1.4),
+                  curve: Curves.elasticOut,
+                  cycles: 0,
+                  builder: (context, animatorState, child) => Transform.scale(
+                    scale: animatorState.value,
+                    child: Icon(
+                      Icons.favorite,
+                      size: 80.0,
+                      color: Colors.red,
+                    ),
+                  ),
+                )
+              : Text(""),
         ],
       ),
     );
