@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
+import 'package:socalnetwork/pages/comments.dart';
 import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/custom_image.dart';
 import 'package:socalnetwork/widgets/progress.dart';
@@ -123,7 +124,6 @@ class _PostState extends State<Post> {
 
   handleLikePost() {
     bool isLiked = likes[currentUserId] == true;
-
     if (isLiked) {
       postsRef
           .doc(ownerId)
@@ -183,6 +183,21 @@ class _PostState extends State<Post> {
     );
   }
 
+
+  // showComments({String postId, String ownerId, String mediaUrl}) {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           // settings: RouteSettings(name: "/Comments"),
+  //           builder: (context) {
+  //             return Comments(
+  //               postId: postId,
+  //               postOwnerId: ownerId,
+  //               postMediaUrl: mediaUrl,
+  //             );
+  //           }));
+  // }
+
   buildPostFooter() {
     return Column(
       children: [
@@ -203,9 +218,14 @@ class _PostState extends State<Post> {
             Padding(
               padding: EdgeInsets.only(right: 20.0),
             ),
-            GestureDetector(
-              onTap: () => print("Comment on the post"),
-              child: Icon(
+            IconButton(
+              onPressed: showComments(
+                context,
+                postId: postId,
+                ownerId: ownerId,
+                mediaUrl: mediaUrl,
+              ),
+              icon: Icon(
                 Icons.mode_comment,
                 size: 28.0,
                 color: Colors.blue[900],
@@ -262,3 +282,15 @@ class _PostState extends State<Post> {
     );
   }
 }
+
+showComments(BuildContext context,
+    {String postId, String ownerId, String mediaUrl}) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Comments(
+      postId: postId,
+      postOwnerId: ownerId,
+      postMediaUrl: mediaUrl,
+    );
+  }));
+}
+
