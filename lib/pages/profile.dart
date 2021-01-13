@@ -84,26 +84,24 @@ class _ProfileState extends State<Profile> {
 
   Container buildButton({String text, Function function}) {
     return Container(
-      padding: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.only(top: 2.0),
       child: FlatButton(
         onPressed: function,
-        child: Expanded(
-          child: Container(
-            width: 216.0,
-            height: 27.0,
-            child: Text(
-              text,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
+        child: Container(
+          width: 216.0,
+          height: 27.0,
+          child: Text(
+            text,
+            style:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            border: Border.all(
               color: Colors.blue,
-              border: Border.all(
-                color: Colors.blue,
-              ),
-              borderRadius: BorderRadius.circular(5.0),
             ),
+            borderRadius: BorderRadius.circular(5.0),
           ),
         ),
       ),
