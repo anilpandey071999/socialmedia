@@ -130,6 +130,7 @@ class _PostState extends State<Post> {
           .collection("userPosts")
           .doc(postId)
           .update({'likes.$currentUserId': false});
+      removeLikeFromActivityFeed();
       setState(() {
         likeCount -= 1;
         isLiked = false;
@@ -141,6 +142,7 @@ class _PostState extends State<Post> {
           .collection("userPosts")
           .doc(postId)
           .update({'likes.$currentUserId': true});
+      addLikeToActivityFeed();
       setState(() {
         likeCount += 1;
         isLiked = true;
@@ -151,6 +153,34 @@ class _PostState extends State<Post> {
         setState(() {
           showHeart = false;
         });
+      });
+    }
+  }
+
+  removeLikeFromActivityFeed() {
+    if (currentUserId != ownerId) {
+      activityFeedRef
+          .doc(ownerId)
+          .collection("feedItems")
+          .doc(postId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    }
+  }
+
+  addLikeToActivityFeed() {
+    if (currentUserId != ownerId) {
+      activityFeedRef.doc(ownerId).collection("feedItems").doc(postId).set({
+        "type": "like",
+        "username": currentUser.username,
+        "userId": currentUser.id,
+        "postId": postId,
+        "mediaUrl": mediaUrl,
+        "timestamp": timeStamp,
       });
     }
   }
