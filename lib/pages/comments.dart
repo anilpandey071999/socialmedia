@@ -30,18 +30,23 @@ class CommentsState extends State<Comments> {
 
   buildComments() {
     return StreamBuilder(
-      stream: commentRef.doc(postId).collection('comments').orderBy('timestamp',descending: true).snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return circularProgress();
-        }
-        List<Comment> comments = [];
-        snapshot.data.docs.forEach((doc) {
-          comments.add(Comment.fromDocumnet(doc));
+        stream: commentRef
+            .doc(postId)
+            .collection('comments')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
+          }
+          List<Comment> comments = [];
+          snapshot.data.docs.forEach((doc) {
+            comments.add(Comment.fromDocumnet(doc));
+          });
+          return ListView(
+            children: comments,
+          );
         });
-        return ListView( children: comments,);
-      }
-    );
   }
 
   addComment() {
@@ -52,6 +57,19 @@ class CommentsState extends State<Comments> {
       "avatarUrl": currentUser.photoUrl,
       "userId": currentUser.id
     });
+
+    if (postOwnerId != currentUser.id) {
+      activityFeedRef.doc(postOwnerId).collection("feedItems").add({
+        "type": "comment",
+        "comment": commentController.text,
+        "username": currentUser.username,
+        "userId": currentUser.id,
+        "postId": postId,
+        "userProfileImg": currentUser.photoUrl,
+        "mediaUrl": postMediaUrl,
+        "timestamp": timeStamp,
+      });
+    }
     commentController.clear();
   }
 
@@ -73,7 +91,7 @@ class CommentsState extends State<Comments> {
               ),
             ),
             trailing: OutlineButton(
-              onPressed:addComment,
+              onPressed: addComment,
               borderSide: BorderSide.none,
               child: Text("Post"),
             ),
@@ -97,7 +115,7 @@ class Comment extends StatelessWidget {
     this.avatorUrl,
     this.comment,
     this.timestamp,
-});
+  });
 
   factory Comment.fromDocumnet(DocumentSnapshot doc) {
     return Comment(
