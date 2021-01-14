@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/pages/home.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:socalnetwork/widgets/custom_image.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
