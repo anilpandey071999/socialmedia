@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
+import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/comments.dart';
 import 'package:socalnetwork/pages/home.dart';
 import 'package:socalnetwork/widgets/custom_image.dart';
@@ -103,7 +104,7 @@ class _PostState extends State<Post> {
             backgroundImage: CachedNetworkImageProvider(user.photoUrl),
           ),
           title: GestureDetector(
-            onTap: () => print("showing Profile"),
+            onTap: () => showProfile(context, profileId: user.id),
             child: Text(
               user.username,
               style: TextStyle(
