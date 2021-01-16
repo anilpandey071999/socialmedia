@@ -92,8 +92,7 @@ class _ProfileState extends State<Profile> {
           height: 27.0,
           child: Text(
             text,
-            style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -114,6 +113,10 @@ class _ProfileState extends State<Profile> {
       return buildButton(
         text: "Edit Profile",
         function: editProfile,
+      );
+    } else {
+      return buildButton(
+        text: "Follow",
       );
     }
   }
