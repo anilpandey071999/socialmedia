@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socalnetwork/models/user.dart';
+import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/home.dart';
 // import 'package:socalnetwork/widgets/custom_image.dart';
 // import 'package:socalnetwork/widgets/header.dart';
@@ -123,7 +124,7 @@ class UserResult extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => print("Taped"),
+            onTap: () => showProfile(context, profileId: user.id),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,
