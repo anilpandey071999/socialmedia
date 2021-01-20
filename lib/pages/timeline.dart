@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:socalnetwork/models/user.dart';
 import 'package:socalnetwork/widgets/header.dart';
 import 'package:socalnetwork/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socalnetwork/models/home.dart';
 
 final userRef = FirebaseFirestore.instance.collection('user');
 
 class Timeline extends StatefulWidget {
+  final User currentUser;
+
+  Timeline({this.currentUser});
+
   @override
   _TimelineState createState() => _TimelineState();
 }
@@ -22,6 +28,11 @@ class _TimelineState extends State<Timeline> {
     // updateUser();
     // deletUser();
     super.initState();
+    getTimeline();
+  }
+
+  getTimeline() async {
+    await timelineRef;
   }
 
   deletUser() async {
