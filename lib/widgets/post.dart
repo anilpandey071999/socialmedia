@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:animator/animator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -115,12 +116,37 @@ class _PostState extends State<Post> {
           ),
           subtitle: Text(location),
           trailing: IconButton(
-            onPressed: () => print('Delete Post'),
+            onPressed: () => handleDeletePost(context),
             icon: Icon(Icons.more_vert),
           ),
         );
       },
     );
+  }
+
+  handleDeletePost(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Remove  this post?"),
+            children: [
+              SimpleDialogOption(
+                onPressed: () {},
+                child: Text(
+                  'Delete(not available)',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+            ],
+          );
+        });
   }
 
   handleLikePost() {
