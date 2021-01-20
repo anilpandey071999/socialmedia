@@ -7,6 +7,7 @@ import 'package:socalnetwork/pages/activity_feed.dart';
 import 'package:socalnetwork/pages/create_account.dart';
 import 'package:socalnetwork/pages/profile.dart';
 import 'package:socalnetwork/pages/search.dart';
+import 'package:socalnetwork/pages/timeline.dart';
 import 'package:socalnetwork/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -15,8 +16,11 @@ FirebaseStorage storage = FirebaseStorage.instance;
 final storageRef = storage.ref();
 final userRef = FirebaseFirestore.instance.collection('users');
 final postsRef = FirebaseFirestore.instance.collection('posts');
+final timelineRef = FirebaseFirestore.instance.collection('timeline');
 final commentRef = FirebaseFirestore.instance.collection('comments');
 final activityFeedRef = FirebaseFirestore.instance.collection("feed");
+final followersRef = FirebaseFirestore.instance.collection('followers');
+final followingRef = FirebaseFirestore.instance.collection("following");
 final DateTime timeStamp = DateTime.now();
 User currentUser;
 
@@ -125,11 +129,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: [
-          // Timeline(),
-          RaisedButton(
-            child: Text("Logout"),
-            onPressed: logout,
+          Timeline(
+            currentUser: currentUser,
           ),
+          // RaisedButton(
+          //   child: Text("Logout"),
+          //   onPressed: logout,
+          // ),
           ActivityFeed(),
           Upload(
             currentUser: currentUser,
