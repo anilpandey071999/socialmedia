@@ -151,9 +151,9 @@ class _TimelineState extends State<Timeline> {
         List<UserResult> userResults = [];
         snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
-          final bool isAuthUser = currentUser.id == user.id;
-          if (isAuthUser) {
-            return null;
+          // final bool isAuthUser = currentUser.id == user.id;
+          if (currentUser.id == user.id) {
+            return;
           } else {
             UserResult userResult = UserResult(user);
             userResults.add(userResult);
